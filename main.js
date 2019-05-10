@@ -56,7 +56,7 @@ fetch('pogo.geojson')
       }
     })
     features
-      .bindPopup(layer => `${layer.feature.geometry.coordinates[1]}, ${layer.feature.geometry.coordinates[0]}`)
+      .bindPopup(layer => layer.feature.properties.name)
       // .bindTooltip(layer => layer.feature.properties.name, {
       //   direction: 'top'
       // })
