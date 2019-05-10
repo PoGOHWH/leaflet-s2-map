@@ -8,6 +8,12 @@ const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1
 
 const map = L.map('map').setView([22.5609, 88.3612], 12)
 
+L.control.locate({
+  flyTo: true,
+  drawCircle: false,
+  drawMarker: false,
+}).addTo(map)
+
 L.tileLayer(
   'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
     accessToken,
@@ -18,39 +24,77 @@ L.tileLayer(
 fetch('pogo.geojson')
   .then(response => response.json())
   .then(data => {
-    L.geoJSON(data, {
+    const features = L.geoJSON(data, {
       pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
         stroke: false,
+        fill: true,
         radius: 5,
         fillOpacity: 1,
+        text: feature.properties.name,
       }),
       style: feature => {
         switch (feature.properties.pogo_type) {
           case 'gym':
             return {
-              color: '#000000',
+              fillColor: '#000000',
               radius: 7,
               fillOpacity: 1,
             }
           case 'stop':
             return {
-              color: '#13c193',
+              fillColor: '#13c193',
               radius: 5,
               fillOpacity: 0.75
             }
           default:
             return {
-              color: '#f000c4',
+              fillColor: '#f000c4',
               radius: 1,
               fillOpacity: 0.5,
             }
         }
       }
     })
-      // .bindPopup(layer => `${layer.feature.geometry.coordinates[1]}, ${layer.feature.geometry.coordinates[0]}`)
-      .bindTooltip(layer => layer.feature.properties.name, {
-        direction: 'top'
-      })
+    features
+      .bindPopup(layer => `${layer.feature.geometry.coordinates[1]}, ${layer.feature.geometry.coordinates[0]}`)
+      // .bindTooltip(layer => layer.feature.properties.name, {
+      //   direction: 'top'
+      // })
+      .addTo(map)
+
+    const searchControl = new L.Control.Search({
+      position: 'topright',
+      initial: false,
+      layer: features,
+      propertyName: 'name',
+      marker: {
+        icon: false,
+        circle: {
+          stroke: true,
+          color: '#e57002',
+          fill: false,
+          radius: 12,
+        }
+      },
+      moveToLocation: (latlng, title, map) => {
+        map.setView(latlng, 17)
+      },
+    })
+    searchControl
+      // .on('search:locationfound', e => {
+      //   console.log(e)
+      //   e.layer.setStyle({
+      //     stroke: true,
+      //     weight: 4,
+      //     color: '#e57002',
+      //   })
+      //   e.layer.openPopup()
+      // })
+      // .on('search:collapsed', e => {
+      //   features.eachLayer(layer => { // restore feature color
+      //     features.resetStyle(layer)
+      //   })
+      // })
       .addTo(map)
   })
 
@@ -71,12 +115,12 @@ const updateMapGrid = () => {
   const levels = {
     17: {
       color: '#f9af02',
-      opacity: 0.75,
+      opacity: 0.5,
       weight: 1,
     },
     14: {
       color: '#e57002',
-      opacity: 0.5,
+      opacity: 0.3,
       weight: 3,
     },
     10: {
@@ -125,7 +169,6 @@ const updateMapGrid = () => {
 
   Object.keys(levels).forEach(level => {
     const options = levels[level]
-    console.log(options)
     if (zoom >= level) {
       const cell = S2.S2Cell.FromLatLng(map.getCenter(), level)
       drawCellAndNeighbors(cell, options)
