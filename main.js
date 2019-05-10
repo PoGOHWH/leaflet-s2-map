@@ -29,13 +29,13 @@ fetch('pogo.geojson')
           case 'gym':
             return {
               color: '#000000',
-              radius: 5,
+              radius: 7,
               fillOpacity: 1,
             }
           case 'stop':
             return {
-              color: '#00ebac',
-              radius: 3,
+              color: '#13c193',
+              radius: 5,
               fillOpacity: 0.75
             }
           default:
@@ -68,7 +68,25 @@ const updateMapGrid = () => {
   const bounds = map.getBounds()
   const seenCells = {}
 
-  const drawCell = (cell) => {
+  const levels = {
+    17: {
+      color: '#f9af02',
+      opacity: 0.75,
+      weight: 1,
+    },
+    14: {
+      color: '#e57002',
+      opacity: 0.5,
+      weight: 3,
+    },
+    10: {
+      color: '#e55102',
+      opacity: 0.25,
+      weight: 5,
+    },
+  }
+
+  const drawCell = (cell, options) => {
     // corner points
     const corners = cell.getCornerLatLngs()
     // the level 6 cells have noticible errors with non-geodesic lines - and the larger level 4 cells are worse
@@ -76,15 +94,13 @@ const updateMapGrid = () => {
     // from the other cell, or be off screen so we don't care
     const region = L.polyline([corners[0], corners[1], corners[2]], {
       fill: false,
-      color: 'orange',
-      opacity: 0.25,
-      weight: 1 + (20 - cell.level) / 5,
-      clickable: false
+      clickable: false,
+      ...options,
     })
     regionLayer.addLayer(region)
   }
 
-  const drawCellAndNeighbors = (cell) => {
+  const drawCellAndNeighbors = (cell, options) => {
     let cellStr = cell.toString()
     if (!seenCells[cellStr]) {
       // cell not visited - flag it as visited now
@@ -94,11 +110,11 @@ const updateMapGrid = () => {
       let cellBounds = L.latLngBounds([corners[0], corners[1]]).extend(corners[2]).extend(corners[3])
       if (cellBounds.intersects(bounds)) {
         // on screen - draw it
-        drawCell(cell)
+        drawCell(cell, options)
         // and recurse to our neighbors
         let neighbors = cell.getNeighbors()
         for (let i = 0; i < neighbors.length; i++) {
-          drawCellAndNeighbors(neighbors[i])
+          drawCellAndNeighbors(neighbors[i], options)
         }
       }
     }
@@ -107,11 +123,12 @@ const updateMapGrid = () => {
   // center cell
   const zoom = map.getZoom()
 
-  const levels = [17, 14, 10]
-  levels.forEach(level => {
+  Object.keys(levels).forEach(level => {
+    const options = levels[level]
+    console.log(options)
     if (zoom >= level) {
       const cell = S2.S2Cell.FromLatLng(map.getCenter(), level)
-      drawCellAndNeighbors(cell)
+      drawCellAndNeighbors(cell, options)
     }
   })
 }
