@@ -56,10 +56,10 @@ fetch('pogo.geojson')
       }
     })
     features
-      .bindPopup(layer => layer.feature.properties.name)
-      // .bindTooltip(layer => layer.feature.properties.name, {
-      //   direction: 'top'
-      // })
+      // .bindPopup(layer => layer.feature.properties.name)
+      .bindTooltip(layer => layer.feature.properties.name, {
+        direction: 'top'
+      })
       .addTo(map)
 
     const searchControl = new L.Control.Search({
