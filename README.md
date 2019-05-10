@@ -1,2 +1,5 @@
-# leaflet-s2-map
-A standalone map visualizing all the PoI's, S2 cells, and other information the PoGOHWH server needs
+# [pogohwh-map](https://pogohwh-map.scio.now.sh/)
+
+A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!
+
+Point of Interest data from [iitc-pogo-json](https://github.com/PoGOHWH/iitc-pogo-json/), courtesy of SS!
