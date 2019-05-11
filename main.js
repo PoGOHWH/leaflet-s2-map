@@ -27,6 +27,13 @@ L.tileLayer(
 fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
+    // add unique concatenation of name and guid for searching
+    data.features.forEach(feature => {
+      feature.properties.search = `${feature.properties.name} [${feature.properties.guid}]`
+    })
+    return data
+  })
+  .then(data => {
     const features = L.geoJSON(data, {
       pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
         stroke: false,
@@ -69,7 +76,7 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
       position: 'topright',
       initial: false,
       layer: features,
-      propertyName: 'name',
+      propertyName: 'search',
       marker: {
         icon: false,
         circle: {
