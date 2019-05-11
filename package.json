@@ -1,0 +1,16 @@
+{
+  "name": "pogohwh-map",
+  "version": "1.2.11",
+  "description": "A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!",
+  "scripts": {
+    "deploy": "now"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/PoGOHWH/leaflet-s2-map.git"
+  },
+  "bugs": {
+    "url": "https://github.com/PoGOHWH/leaflet-s2-map/issues"
+  },
+  "homepage": "https://pogohwh-map.scio.now.sh"
+}
