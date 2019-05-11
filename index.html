@@ -1,52 +1,67 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>The PoGOHWH Map</title>
+    <meta
+      name="description"
+      content="A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#fafafa" />
 
-<head>
+    <script src="https://unpkg.com/s2-geometry" crossorigin></script>
 
-  <meta charset="utf-8">
-  <title>The PoGOHWH Map</title>
-  <meta name="description"
-        content="A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#fafafa">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css"
+      crossorigin
+    />
+    <script src="https://unpkg.com/leaflet" crossorigin></script>
 
-  <script src="https://unpkg.com/s2-geometry" crossorigin></script>
+    <script src="https://unpkg.com/leaflet-hash" crossorigin></script>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" crossorigin />
-  <script src="https://unpkg.com/leaflet" crossorigin></script>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css"
+      crossorigin
+    />
+    <script
+      src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js"
+      crossorigin
+    ></script>
 
-  <script src="https://unpkg.com/leaflet-hash" crossorigin></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet-search/dist/leaflet-search.src.css"
+      crossorigin
+    />
+    <script
+      src="https://unpkg.com/leaflet-search/dist/leaflet-search.src.js"
+      crossorigin
+    ></script>
 
-  <script src="https://unpkg.com/leaflet-omnivore/leaflet-omnivore.min.js" crossorigin></script>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
 
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.css" crossorigin />
-  <script src="https://unpkg.com/leaflet.locatecontrol/dist/L.Control.Locate.min.js" crossorigin></script>
+      main {
+        width: 100vw;
+        height: 100vh;
+      }
+    </style>
+  </head>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-search/dist/leaflet-search.src.css" crossorigin />
-  <script src="https://unpkg.com/leaflet-search/dist/leaflet-search.src.js" crossorigin></script>
+  <body>
+    <main id="map"></main>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    main {
-      width: 100vw;
-      height: 100vh;
-    }
-  </style>
-
-</head>
-
-<body>
-
-  <main id='map'></main>
-
-  <script src="main.js"> </script>
-
-</body>
-
+    <script src="main.js"></script>
+  </body>
 </html>
