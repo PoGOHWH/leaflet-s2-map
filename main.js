@@ -1,4 +1,4 @@
-/* global L, S2 */
+/* global L, S2, omnivore */
 
 /*
 Setup the Leaflet map
@@ -6,7 +6,7 @@ Setup the Leaflet map
 
 const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw'
 
-const map = L.map('map').setView([22.5609, 88.3612], 12)
+const map = L.map('map').setView([22.57, 88.32403643149632], 15)
 
 L.control.locate({
   flyTo: true,
@@ -97,6 +97,49 @@ fetch('pogo.geojson')
       // })
       .addTo(map)
   })
+
+// Google My Maps layers
+const addKML = (url, style) => {
+  omnivore.kml(
+    url,
+    null,
+    L.geoJSON(null, {
+      pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+        stroke: false,
+        fill: true,
+        fillColor: '#FB2165',
+        radius: 3,
+        fillOpacity: 1,
+        text: feature.properties.name,
+        ...style
+      }),
+    })
+      .bindTooltip(layer => layer.feature.properties.name, {
+        direction: 'top'
+      })
+      .addTo(map)
+  )
+}
+// planned
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
+    fillColor: '#FB2165',
+    fillOpacity: 0.5,
+  }
+)
+// nominated
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=iGZV7vq4d4w', {
+    fillColor: '#FB2165',
+  }
+)
+// invalid
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=U2-kbDVGLfo', {
+    fillColor: '#767676',
+    fillOpacity: 0.5,
+  }
+)
 
 /*
 Overlay the S2 cells
