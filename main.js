@@ -21,7 +21,7 @@ L.tileLayer(
     maxZoom: 18,
   }).addTo(map)
 
-fetch('pogo.geojson')
+fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     const features = L.geoJSON(data, {
