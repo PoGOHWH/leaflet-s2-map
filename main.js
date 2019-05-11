@@ -8,6 +8,9 @@ const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1
 
 const map = L.map('map').setView([22.57, 88.32403643149632], 15)
 
+// eslint-disable-next-line no-unused-vars
+const hash = new L.Hash(map)
+
 L.control.locate({
   flyTo: true,
   drawCircle: false,
@@ -21,7 +24,7 @@ L.tileLayer(
     maxZoom: 18,
   }).addTo(map)
 
-fetch('pogo.geojson')
+fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     const features = L.geoJSON(data, {
