@@ -8,6 +8,9 @@ const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1
 
 const map = L.map('map').setView([22.5609, 88.3612], 12)
 
+// eslint-disable-next-line no-unused-vars
+const hash = new L.Hash(map)
+
 L.control.locate({
   flyTo: true,
   drawCircle: false,
