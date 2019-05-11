@@ -73,7 +73,6 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
       .addTo(map)
 
     const searchControl = new L.Control.Search({
-      position: 'topright',
       initial: false,
       layer: features,
       propertyName: 'search',
