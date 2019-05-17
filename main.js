@@ -60,7 +60,7 @@ const planned = addKML(
     radius: 5,
   }
 )
-const searchControl = new L.Control.Search({
+new L.Control.Search({
   initial: false,
   layer: planned,
   propertyName: 'name',
