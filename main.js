@@ -39,9 +39,12 @@ const addKML = (url, style) => {
       ...style
     }),
   })
-    .bindTooltip(layer => layer.feature.properties.name, {
-      direction: 'top'
-    })
+    .bindTooltip(
+      layer => layer.feature.properties.name, // Unfortunately the KMLs have no description property to
+      {
+        direction: 'top'
+      }
+    )
     .addTo(map)
   omnivore.kml(
     url,
@@ -164,12 +167,12 @@ const updateMapGrid = () => {
     },
     14: {
       color: '#e57002',
-      opacity: 1,
+      opacity: 0.75,
       weight: 3,
     },
     10: {
       color: '#e55102',
-      opacity: 1,
+      opacity: 0.5,
       weight: 5,
     },
   }
