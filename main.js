@@ -24,6 +24,9 @@ L.gridLayer.googleMutant({
 // Google My Maps layers
 const addKML = (url, style) => {
   const layer = L.geoJSON(null, {
+    onEachFeature: feature => {
+      feature.properties.name = `${feature.properties.name} <${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}>`
+    },
     pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
       stroke: true,
       color: '#FFFFFF',
