@@ -20,9 +20,11 @@
   ! add attribution
   ! persist state with url
 *! v0.2noms
-  ? permanently switch the Nominations fork to Google Satellite
+  ! permanently switch the Nominations fork to Google Satellite
     @ https://gist.github.com/bencevans/4504864
-  ? add descriptions and coords to Nominations markers
+  !~ add descriptions and coords to Nominations markers
+    - Omnivore doesn't give me descriptions; can't do.
+  ! make planned points searchable
 *? v0.3
   ? extend information
     - use an about modal
