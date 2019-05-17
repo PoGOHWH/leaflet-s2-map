@@ -4,8 +4,6 @@
 Setup the Leaflet map
 */
 
-const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw'
-
 const map = L.map('map').setView([22.57, 88.32403643149632], 15)
 
 // eslint-disable-next-line no-unused-vars
@@ -17,12 +15,19 @@ L.control.locate({
   drawMarker: false,
 }).addTo(map)
 
-L.tileLayer(
-  'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
-    accessToken,
-    attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
-    maxZoom: 18,
-  }).addTo(map)
+// OSM/Mapbox tiles not needed right now
+// const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw'
+// L.tileLayer(
+//   'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+//     accessToken,
+//     attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
+//     maxZoom: 18,
+//   }).addTo(map)
+
+// The fabled Google Maps satellite layer :angelic choir:
+L.gridLayer.googleMutant({
+  type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+}).addTo(map)
 
 fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
