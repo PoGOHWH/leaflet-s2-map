@@ -15,20 +15,80 @@ L.control.locate({
   drawMarker: false,
 }).addTo(map)
 
-// OSM/Mapbox tiles not needed right now
-// const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw'
-// L.tileLayer(
-//   'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
-//     accessToken,
-//     attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
-//     maxZoom: 18,
-//   }).addTo(map)
-
 // The fabled Google Maps satellite layer :angelic choir:
 L.gridLayer.googleMutant({
   type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+  opacity: 0.75,
 }).addTo(map)
 
+// Google My Maps layers
+const addKML = (url, style) => {
+  const layer = L.geoJSON(null, {
+    pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+      stroke: true,
+      color: '#FFFFFF',
+      weight: 2,
+      fill: true,
+      fillColor: '#FB2165',
+      radius: 3,
+      fillOpacity: 1,
+      text: feature.properties.name,
+      ...style
+    }),
+  })
+    .bindTooltip(layer => layer.feature.properties.name, {
+      direction: 'top'
+    })
+    .addTo(map)
+  omnivore.kml(
+    url,
+    null,
+    layer
+  )
+  return layer
+}
+// planned
+const planned = addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
+    fillColor: '#FB2165',
+    radius: 5,
+  }
+)
+const searchControl = new L.Control.Search({
+  initial: false,
+  layer: planned,
+  propertyName: 'name',
+  marker: {
+    icon: false,
+    circle: {
+      stroke: true,
+      color: '#f9af02',
+      fill: false,
+      radius: 12,
+    }
+  },
+  moveToLocation: (latlng, title, map) => {
+    console.log(latlng, title, map)
+    map.setView(latlng, 17)
+  },
+})
+  .addTo(map)
+// nominated
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=iGZV7vq4d4w', {
+    fillColor: '#FB2165',
+    opacity: 0.5,
+  }
+)
+// invalid
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=U2-kbDVGLfo', {
+    fillColor: '#767676',
+    opacity: 0.5,
+  }
+)
+
+// existing points
 fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
@@ -41,31 +101,32 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
   .then(data => {
     const features = L.geoJSON(data, {
       pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-        stroke: false,
+        stroke: true,
+        color: '#FFFFFF',
+        weight: 2,
         fill: true,
         radius: 5,
-        fillOpacity: 1,
         text: feature.properties.name,
       }),
       style: feature => {
         switch (feature.properties.pogo_type) {
           case 'gym':
             return {
-              fillColor: '#000000',
-              radius: 7,
+              fillColor: '#13c193',
+              radius: 5,
               fillOpacity: 1,
             }
           case 'stop':
             return {
               fillColor: '#13c193',
-              radius: 5,
-              fillOpacity: 0.75
+              radius: 3,
+              fillOpacity: 1
             }
           default:
             return {
               fillColor: '#f000c4',
               radius: 1,
-              fillOpacity: 0.5,
+              fillOpacity: 1,
             }
         }
       }
@@ -76,84 +137,7 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
         direction: 'top'
       })
       .addTo(map)
-
-    const searchControl = new L.Control.Search({
-      initial: false,
-      layer: features,
-      propertyName: 'search',
-      marker: {
-        icon: false,
-        circle: {
-          stroke: true,
-          color: '#e57002',
-          fill: false,
-          radius: 12,
-        }
-      },
-      moveToLocation: (latlng, title, map) => {
-        map.setView(latlng, 17)
-      },
-    })
-    searchControl
-      // .on('search:locationfound', e => {
-      //   console.log(e)
-      //   e.layer.setStyle({
-      //     stroke: true,
-      //     weight: 4,
-      //     color: '#e57002',
-      //   })
-      //   e.layer.openPopup()
-      // })
-      // .on('search:collapsed', e => {
-      //   features.eachLayer(layer => { // restore feature color
-      //     features.resetStyle(layer)
-      //   })
-      // })
-      .addTo(map)
   })
-
-// Google My Maps layers
-const addKML = (url, style) => {
-  omnivore.kml(
-    url,
-    null,
-    L.geoJSON(null, {
-      pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-        stroke: false,
-        fill: true,
-        fillColor: '#FB2165',
-        radius: 3,
-        fillOpacity: 1,
-        text: feature.properties.name,
-        ...style
-      }),
-    })
-      .bindTooltip(layer => layer.feature.properties.name, {
-        direction: 'top'
-      })
-      .addTo(map)
-  )
-}
-// planned
-addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
-    fillColor: '#FB2165',
-    fillOpacity: 0.5,
-  }
-)
-// nominated
-addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=iGZV7vq4d4w', {
-    fillColor: '#FB2165',
-  }
-)
-// invalid
-addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=U2-kbDVGLfo', {
-    fillColor: '#767676',
-    fillOpacity: 0.5,
-  }
-)
 
 /*
 Overlay the S2 cells
@@ -172,17 +156,17 @@ const updateMapGrid = () => {
   const levels = {
     17: {
       color: '#f9af02',
-      opacity: 0.5,
+      opacity: 1,
       weight: 1,
     },
     14: {
       color: '#e57002',
-      opacity: 0.3,
+      opacity: 1,
       weight: 3,
     },
     10: {
       color: '#e55102',
-      opacity: 0.25,
+      opacity: 1,
       weight: 5,
     },
   }
