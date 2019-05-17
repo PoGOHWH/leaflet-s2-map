@@ -19,12 +19,26 @@
   ! get existing poi geojson to load remotely!
   ! add attribution
   ! persist state with url
+*! v0.2noms
+  ? permanently switch the Nominations fork to Google Satellite
+    @ https://gist.github.com/bencevans/4504864
+  ? add descriptions and coords to Nominations markers
 *? v0.3
-  ? figure out how to do zoom-dependant styles
-  ? add icons after a zoom level
-  ? find out how dynamic labels can work
-  ? find a way to do add landmark searching
+  ? extend information
+    - use an about modal
+    - data can't be 100% due to Ingress–PoGO anomalies
+    - data is manually tagged, report to iitc-pogo-json if errors are noticed
+    - data will always be a bit stale, 
+      ? timestamp with date for the latest update to `IITC-pogo.geojson`
+    - warn about eyeballing cell boundaries as the Nomination form uses Google Maps Satellite and everything else uses
+  ? add more complex custom icons after a zoom level
+    ? figure out how to do zoom-dependant styles
+    ? draw simple and custom icons as necessary
 *? v0.4
+  ? add a toggle for Google "satellite" tiles
+  ? do dynamic collision-based labels
+  ? extend with general location search
+*? v0.5
   ? automatic deployment through GitHub Actions
     ? automatically updated from iitc-pogo-json
   ? make offline capable
