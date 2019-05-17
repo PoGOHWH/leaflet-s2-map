@@ -16,10 +16,25 @@ L.control.locate({
 }).addTo(map)
 
 // The fabled Google Maps satellite layer :angelic choir:
-L.gridLayer.googleMutant({
+// eslint-disable-next-line no-unused-vars
+const tileSatellite = L.gridLayer.googleMutant({
   type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
-  opacity: 0.75,
+  // opacity: 0.25,
 }).addTo(map)
+
+// And Mapbox' vector
+// eslint-disable-next-line no-unused-vars
+const tileStreet = L.tileLayer(
+  'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+    accessToken: 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw',
+    attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
+    maxZoom: 23,
+  }).addTo(map)
+map.on('zoomend', () => {
+  const zoom = map.getZoom()
+  if (zoom >= 17) tileStreet.setOpacity(1 - (zoom - 17) / 5)
+  else tileStreet.setOpacity(1)
+})
 
 // Google My Maps layers
 const addKML = (url, style) => {
@@ -162,17 +177,17 @@ const updateMapGrid = () => {
   const levels = {
     17: {
       color: '#f9af02',
-      opacity: 1,
+      opacity: 0.5,
       weight: 1,
     },
     14: {
       color: '#e57002',
-      opacity: 0.75,
+      opacity: 0.3,
       weight: 3,
     },
     10: {
       color: '#e55102',
-      opacity: 0.5,
+      opacity: 0.2,
       weight: 5,
     },
   }
