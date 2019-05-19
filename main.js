@@ -30,13 +30,15 @@ const tileStreet = L.tileLayer(
     attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
     maxZoom: 23,
   }).addTo(map)
-map.on('zoomend', () => {
+
+const updateTiles = () => {
   const zoom = map.getZoom()
   if (zoom >= 17) tileStreet.setOpacity(1 - (zoom - 17) / 5)
   else tileSatellite.setOpacity(1)
   if (zoom <= 20) tileSatellite.setOpacity(1 - (20 - zoom) / 4)
   else tileSatellite.setOpacity(1)
-})
+}
+map.on('zoomend', updateTiles)
 
 // Google My Maps layers
 const addKML = (url, style) => {
@@ -243,4 +245,5 @@ const updateMapGrid = () => {
 regionLayer = L.layerGroup()
 map.addLayer(regionLayer)
 map.on('moveend', updateMapGrid)
+updateTiles()
 updateMapGrid()
