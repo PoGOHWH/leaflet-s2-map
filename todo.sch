@@ -25,6 +25,12 @@
   !~ add descriptions and coords to Nominations markers
     - Omnivore doesn't give me descriptions; can't do.
   ! make planned points searchable
+  ? switch to a single export from Google My Maps
+    ? conditional style points based on their layer name
+  ? implement query parameter Google My Maps for visualization!
+    ? switch search between existing and planned points if present
+    ? default to our own when parameter is specified but no value given
+*? merge/replace master with howrah
 *? v0.3
   ? extend information
     - use an about modal
