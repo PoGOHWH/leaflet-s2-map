@@ -19,13 +19,13 @@ L.control.locate({
 // eslint-disable-next-line no-unused-vars
 const tileSatellite = L.gridLayer.googleMutant({
   type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
-  // opacity: 0.25,
+  opacity: 0,
 }).addTo(map)
 
 // And Mapbox' vector
 // eslint-disable-next-line no-unused-vars
 const tileStreet = L.tileLayer(
-  'https://api.mapbox.com/styles/v1/mapbox/dark-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+  'https://api.mapbox.com/styles/v1/scio/cjvuj7krb2j1g1cs29u8y3z49/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
     accessToken: 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw',
     attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
     maxZoom: 23,
@@ -33,7 +33,9 @@ const tileStreet = L.tileLayer(
 map.on('zoomend', () => {
   const zoom = map.getZoom()
   if (zoom >= 17) tileStreet.setOpacity(1 - (zoom - 17) / 5)
-  else tileStreet.setOpacity(1)
+  else tileSatellite.setOpacity(1)
+  if (zoom <= 20) tileSatellite.setOpacity(1 - (20 - zoom) / 4)
+  else tileSatellite.setOpacity(1)
 })
 
 // Google My Maps layers
@@ -177,7 +179,7 @@ const updateMapGrid = () => {
   const levels = {
     17: {
       color: '#f9af02',
-      opacity: 0.5,
+      opacity: 1,
       weight: 1,
     },
     14: {
