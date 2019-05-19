@@ -3,8 +3,8 @@
   "version": "1.2.11",
   "description": "A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!",
   "scripts": {
-    "serve": "serve",
-    "staging": "now",
+    "local": "serve",
+    "staging": "now --target staging",
     "production": "now --target production"
   },
   "repository": {
