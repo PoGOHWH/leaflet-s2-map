@@ -114,7 +114,7 @@ addKML(
 )
 
 // existing points
-fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
+fetch('https://rawcdn.githack.com/PoGOHWH/iitc-pogo-json/e2a91a2d36fc7deb7fe19e8b4afaefede0ea76ec/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     // add unique concatenation of name and guid for searching
