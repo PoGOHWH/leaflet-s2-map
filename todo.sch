@@ -63,4 +63,7 @@
     ? manifest
     ? install hook
     ? Lighthouse audit
-*? rename repository to `leaflet-map-pogohwh`
+*? post-release
+  ? add instructions and schemata for custom datasets
+  ? rename repository to `leaflet-map-pogohwh`
+  ? make repo public
