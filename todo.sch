@@ -1,10 +1,10 @@
-*! v0.1
+*! requisites
   ! get leaflet working
   ! get Alfonso's S2 cell rendering code working
   ! load our own geojson data
   ! implement basic tooltips
   ! basic deployment to Now.sh
-*! v0.2
+*! minimum-viable
   ! standardize html
   ! fix scaling on mobile
   ! color S2 cells by level
@@ -19,7 +19,7 @@
   ! get existing poi geojson to load remotely!
   ! add attribution
   ! persist state with url
-*! v0.2noms
+*! nominations
   ! permanently switch the Nominations fork to Google Satellite
     @ https://gist.github.com/bencevans/4504864
   !~ add descriptions and coords to Nominations markers
@@ -31,7 +31,7 @@
     ? switch search between existing and planned points if present
     ? default to our own when parameter is specified but no value given
 *? merge/replace master with howrah
-*? v0.3
+*? presentation and attribution
   ? extend information
     - use an about modal
     - data can't be 100% due to Ingress–PoGO anomalies
@@ -42,12 +42,24 @@
   ? add more complex custom icons after a zoom level
     ? figure out how to do zoom-dependant styles
     ? draw simple and custom icons as necessary
-*? v0.4
-  ? add a toggle for Google "satellite" tiles
+*? fancier presentation and usability
+  ~? add a toggle for Google "satellite" tiles
   ? do dynamic collision-based labels
   ? extend with general location search
-*? v0.5
+  *? expose query parameters for custom datasets graphically
+*? automation and offline
   ? automatic deployment through GitHub Actions
     ? automatically updated from iitc-pogo-json
-  ? make offline capable
-  ? make into a PWA
+  *? make offline capable
+    @ https://filipbech.github.io/2017/02/service-worker-and-caching-from-other-origins
+      - SW can't cache cross origin resources unless they have `access-control-allow-originL *`
+      - which GitHack does, thankfully
+      ? but Google My Maps does not
+        - perhaps write a Now.sh lambda that transparently does this for you
+    @ https://github.com/MazeMap/Leaflet.TileLayer.PouchDBCached
+      - at least the tiles can be cached
+  *? make into a PWA
+    ? icons
+    ? manifest
+    ? install hook
+    ? Lighthouse audit
