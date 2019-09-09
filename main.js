@@ -72,49 +72,9 @@ const addKML = (url, style) => {
   )
   return layer
 }
-// planned
-const planned = addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
-    fillColor: '#FB2165',
-    radius: 5,
-  }
-)
-new L.Control.Search({
-  initial: false,
-  layer: planned,
-  propertyName: 'name',
-  marker: {
-    icon: false,
-    circle: {
-      stroke: true,
-      color: '#f9af02',
-      fill: false,
-      radius: 12,
-    }
-  },
-  moveToLocation: (latlng, title, map) => {
-    console.log(latlng, title, map)
-    map.setView(latlng, 17)
-  },
-})
-  .addTo(map)
-// nominated
-addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=iGZV7vq4d4w', {
-    fillColor: '#FB2165',
-    opacity: 0.5,
-  }
-)
-// invalid
-addKML(
-  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=U2-kbDVGLfo', {
-    fillColor: '#767676',
-    opacity: 0.5,
-  }
-)
 
 // existing points
-fetch('https://rawcdn.githack.com/PoGOHWH/iitc-pogo-json/e2a91a2d36fc7deb7fe19e8b4afaefede0ea76ec/IITC-pogo.geojson') // NOTE: cache w/ SW
+fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     // add unique concatenation of name and guid for searching
@@ -137,7 +97,7 @@ fetch('https://rawcdn.githack.com/PoGOHWH/iitc-pogo-json/e2a91a2d36fc7deb7fe19e8
         switch (feature.properties.pogo_type) {
           case 'gym':
             return {
-              fillColor: '#13c193',
+              fillColor: '#000000',
               radius: 5,
               fillOpacity: 1,
             }
@@ -161,6 +121,25 @@ fetch('https://rawcdn.githack.com/PoGOHWH/iitc-pogo-json/e2a91a2d36fc7deb7fe19e8
       .bindTooltip(layer => layer.feature.properties.name, {
         direction: 'top'
       })
+      .addTo(map)
+    new L.Control.Search({
+      initial: false,
+      layer: features,
+      propertyName: 'name',
+      marker: {
+        icon: false,
+        circle: {
+          stroke: true,
+          color: '#f9af02',
+          fill: false,
+          radius: 12,
+        }
+      },
+      moveToLocation: (latlng, title, map) => {
+        console.log(latlng, title, map)
+        map.setView(latlng, 17)
+      },
+    })
       .addTo(map)
   })
 
