@@ -1,12 +1,10 @@
-/* global L, S2 */
+/* global L, S2, omnivore */
 
 /*
 Setup the Leaflet map
 */
 
-const accessToken = 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw'
-
-const map = L.map('map').setView([22.5609, 88.3612], 12)
+const map = L.map('map').setView([22.57, 88.32403643149632], 15)
 
 // eslint-disable-next-line no-unused-vars
 const hash = new L.Hash(map)
@@ -17,14 +15,106 @@ L.control.locate({
   drawMarker: false,
 }).addTo(map)
 
-L.tileLayer(
-  'https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
-    accessToken,
+// The fabled Google Maps satellite layer :angelic choir:
+// eslint-disable-next-line no-unused-vars
+const tileSatellite = L.gridLayer.googleMutant({
+  type: 'satellite', // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+  opacity: 0,
+}).addTo(map)
+
+// And Mapbox' vector
+// eslint-disable-next-line no-unused-vars
+const tileStreet = L.tileLayer(
+  'https://api.mapbox.com/styles/v1/scio/cjvuj7krb2j1g1cs29u8y3z49/tiles/256/{z}/{x}/{y}?access_token={accessToken}', {
+    accessToken: 'pk.eyJ1Ijoic2NpbyIsImEiOiJjanZocmp0aXAwNjZ2NDNsamE3dXNwc2I1In0.zfAzKEDrAmDSqiOfS_naVw',
     attribution: 'map tiles &copy; <a href="https://www.openstreetmap.org/">Mapbox</a>, <a href="https://creativecommons.org/licenses/by/3.0/us/">CC-BY</a> | map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a> | dataset from <a href="https://github.com/PoGOHWH/iitc-pogo-json">pogohwh/iitc-pogo-json</a>',
-    maxZoom: 18,
+    maxZoom: 23,
   }).addTo(map)
 
-fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
+const updateTiles = () => {
+  const zoom = map.getZoom()
+  if (zoom >= 17) tileStreet.setOpacity(1 - (zoom - 17) / 5)
+  else tileSatellite.setOpacity(1)
+  if (zoom <= 20) tileSatellite.setOpacity(1 - (20 - zoom) / 4)
+  else tileSatellite.setOpacity(1)
+}
+map.on('zoomend', updateTiles)
+
+// Google My Maps layers
+const addKML = (url, style) => {
+  const layer = L.geoJSON(null, {
+    onEachFeature: feature => {
+      feature.properties.name = `${feature.properties.name} <${feature.geometry.coordinates[1]}, ${feature.geometry.coordinates[0]}>`
+    },
+    pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
+      stroke: true,
+      color: '#FFFFFF',
+      weight: 2,
+      fill: true,
+      fillColor: '#FB2165',
+      radius: 3,
+      fillOpacity: 1,
+      text: feature.properties.name,
+      ...style
+    }),
+  })
+    .bindTooltip(
+      layer => layer.feature.properties.name, // Unfortunately the KMLs have no description property to
+      {
+        direction: 'top'
+      }
+    )
+    .addTo(map)
+  omnivore.kml(
+    url,
+    null,
+    layer
+  )
+  return layer
+}
+// planned
+const planned = addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
+    fillColor: '#FB2165',
+    radius: 5,
+  }
+)
+new L.Control.Search({
+  initial: false,
+  layer: planned,
+  propertyName: 'name',
+  marker: {
+    icon: false,
+    circle: {
+      stroke: true,
+      color: '#f9af02',
+      fill: false,
+      radius: 12,
+    }
+  },
+  moveToLocation: (latlng, title, map) => {
+    console.log(latlng, title, map)
+    map.setView(latlng, 17)
+  },
+})
+  .addTo(map)
+// nominated
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=iGZV7vq4d4w', {
+    fillColor: '#FB2165',
+    opacity: 0.5,
+  }
+)
+// invalid
+addKML(
+  'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=U2-kbDVGLfo', {
+    fillColor: '#767676',
+    opacity: 0.5,
+  }
+)
+
+// existing points
+fetch('https://rawcdn.githack.com/PoGOHWH/iitc-pogo-json/e2a91a2d36fc7deb7fe19e8b4afaefede0ea76ec/IITC-pogo.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     // add unique concatenation of name and guid for searching
@@ -36,31 +126,32 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
   .then(data => {
     const features = L.geoJSON(data, {
       pointToLayer: (feature, latlng) => L.circleMarker(latlng, {
-        stroke: false,
+        stroke: true,
+        color: '#FFFFFF',
+        weight: 2,
         fill: true,
         radius: 5,
-        fillOpacity: 1,
         text: feature.properties.name,
       }),
       style: feature => {
         switch (feature.properties.pogo_type) {
           case 'gym':
             return {
-              fillColor: '#000000',
-              radius: 7,
+              fillColor: '#13c193',
+              radius: 5,
               fillOpacity: 1,
             }
           case 'stop':
             return {
               fillColor: '#13c193',
-              radius: 5,
-              fillOpacity: 0.75
+              radius: 3,
+              fillOpacity: 1
             }
           default:
             return {
               fillColor: '#f000c4',
               radius: 1,
-              fillOpacity: 0.5,
+              fillOpacity: 1,
             }
         }
       }
@@ -70,40 +161,6 @@ fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo
       .bindTooltip(layer => layer.feature.properties.name, {
         direction: 'top'
       })
-      .addTo(map)
-
-    const searchControl = new L.Control.Search({
-      initial: false,
-      layer: features,
-      propertyName: 'search',
-      marker: {
-        icon: false,
-        circle: {
-          stroke: true,
-          color: '#e57002',
-          fill: false,
-          radius: 12,
-        }
-      },
-      moveToLocation: (latlng, title, map) => {
-        map.setView(latlng, 17)
-      },
-    })
-    searchControl
-      // .on('search:locationfound', e => {
-      //   console.log(e)
-      //   e.layer.setStyle({
-      //     stroke: true,
-      //     weight: 4,
-      //     color: '#e57002',
-      //   })
-      //   e.layer.openPopup()
-      // })
-      // .on('search:collapsed', e => {
-      //   features.eachLayer(layer => { // restore feature color
-      //     features.resetStyle(layer)
-      //   })
-      // })
       .addTo(map)
   })
 
@@ -124,7 +181,7 @@ const updateMapGrid = () => {
   const levels = {
     17: {
       color: '#f9af02',
-      opacity: 0.5,
+      opacity: 1,
       weight: 1,
     },
     14: {
@@ -134,7 +191,7 @@ const updateMapGrid = () => {
     },
     10: {
       color: '#e55102',
-      opacity: 0.25,
+      opacity: 0.2,
       weight: 5,
     },
   }
@@ -188,4 +245,5 @@ const updateMapGrid = () => {
 regionLayer = L.layerGroup()
 map.addLayer(regionLayer)
 map.on('moveend', updateMapGrid)
+updateTiles()
 updateMapGrid()
