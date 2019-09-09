@@ -1,5 +1,6 @@
 {
-  "name": "pogohwh-map-howrah",
+  "name": "pogohwh-map",
   "version": 2,
-  "alias": "map.pogohwh.scio.space"
+  "alias": "map.pogohwh.scio.space",
+  "builds": [{ "src": "*", "use": "@now/static" }]
 }
