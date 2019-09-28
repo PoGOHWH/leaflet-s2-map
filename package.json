@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PoGOHWH/pogohwh-map/.git"
+    "url": "git+https://github.com/PoGOHWH/map/.git"
   },
   "bugs": {
-    "url": "https://github.com/PoGOHWH/pogohwh-map/issues"
+    "url": "https://github.com/PoGOHWH/map/issues"
   },
   "homepage": "https://map.pogohwh.scio.space"
 }
