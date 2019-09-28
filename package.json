@@ -1,5 +1,5 @@
 {
-  "name": "pogohwh-map",
+  "name": "pogohwh-map-plan",
   "version": "1.2.12",
   "description": "A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!",
   "scripts": {
