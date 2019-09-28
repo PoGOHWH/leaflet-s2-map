@@ -8,10 +8,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PoGOHWH/leaflet-s2-map.git"
+    "url": "git+https://github.com/PoGOHWH/pogohwh-map/.git"
   },
   "bugs": {
-    "url": "https://github.com/PoGOHWH/leaflet-s2-map/issues"
+    "url": "https://github.com/PoGOHWH/pogohwh-map/issues"
   },
   "homepage": "https://map.pogohwh.scio.space"
 }
