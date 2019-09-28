@@ -226,7 +226,7 @@ fetch('https://api.github.com/repos/pogohwh/iitc-pogo-json/commits?path=IITC-pog
   .then(res => res.json())
   .then(json => new Date(json[0].commit.author.date))
   .then(date => date.toLocaleString('en-IN-u-ca-iso8601', { dateStyle: 'medium', timeStyle: 'short' }))
-  .then(dateString => map.attributionControl.setPrefix(`last update on ${dateString}`))
+  .then(dateString => map.attributionControl.setPrefix(`last updated on <strong>${dateString}</strong>`))
 
 regionLayer = L.layerGroup()
 map.addLayer(regionLayer)
