@@ -1,4 +1,4 @@
-# [pogohwh-map](https://pogohwh-map.scio.now.sh/)
+# [pogohwh-map](https://map.pogohwh.scio.space/)
 
 A standalone map containing all the Pokéstops and Gyms in the extended Kolkata area along with any additional information required by the PoGOHWH Pokémon GO community!
 
