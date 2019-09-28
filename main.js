@@ -74,7 +74,7 @@ const addKML = (url, style) => {
 }
 
 // existing points
-fetch('https://raw.githubusercontent.com/PoGOHWH/iitc-pogo-json/master/IITC-pogo.geojson') // NOTE: cache w/ SW
+fetch('https://raw.githubusercontent.com/PoGOHWH/db-poi/master/poi.geojson') // NOTE: cache w/ SW
   .then(response => response.json())
   .then(data => {
     // add unique concatenation of name and guid for searching
