@@ -41,6 +41,7 @@ const updateTiles = () => {
 map.on('zoomend', updateTiles)
 
 // Google My Maps layers
+// eslint-disable-next-line no-unused-vars
 const addKML = (url, style) => {
   const layer = L.geoJSON(null, {
     onEachFeature: feature => {
@@ -149,6 +150,7 @@ CREDIT: S2 cell drawing pretty much borrowed directly from
 https://gitlab.com/AlfonsoML/pogo-s2/blob/93cc77c1973b4978610ff25a85273d290e2754a0/s2check.user.js
 */
 
+// eslint-disable-next-line prefer-const
 let regionLayer
 
 const updateMapGrid = () => {
