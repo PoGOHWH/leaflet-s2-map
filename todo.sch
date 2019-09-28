@@ -30,17 +30,10 @@
   ? implement query parameter Google My Maps for visualization!
     ? switch search between existing and planned points if present
     ? default to our own when parameter is specified but no value given
-*? merge/replace master with howrah
-*? presentation and attribution
-  ? extend information
-    - use an about modal
-    - data can't be 100% due to Ingress–PoGO anomalies
-    - data is manually tagged, report to iitc-pogo-json if errors are noticed
-    - data will always be a bit stale, 
-      ? timestamp with date for the latest update to `IITC-pogo.geojson`
-    - warn about eyeballing cell boundaries as the Nomination form uses Google Maps Satellite and everything else uses
-  ? add a toggle for Google "satellite" tiles
-  ? switch all styles to the simpler bordered versions
+*! merge/replace master with howrah
+*! presentation and attribution
+  - expandable attribution
+  - update timestamp
 *? v0.4
   ? add more complex custom icons after a zoom level
     ? figure out how to do zoom-dependant styles
@@ -51,8 +44,8 @@
   ? extend with general location search
   *? expose query parameters for custom datasets graphically
 *? automation and offline
-  ? automatic deployment through GitHub Actions
-    ? automatically updated from iitc-pogo-json
+  ! automatic deployment through GitHub Actions
+    ! automatically updated from iitc-pogo-json    
   *? make offline capable
     @ https://filipbech.github.io/2017/02/service-worker-and-caching-from-other-origins
       - SW can't cache cross origin resources unless they have `access-control-allow-originL *`
