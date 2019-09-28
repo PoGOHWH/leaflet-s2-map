@@ -190,18 +190,18 @@ const updateMapGrid = () => {
   }
 
   const drawCellAndNeighbors = (cell, options) => {
-    let cellStr = cell.toString()
+    const cellStr = cell.toString()
     if (!seenCells[cellStr]) {
       // cell not visited - flag it as visited now
       seenCells[cellStr] = true
       // is it on the screen?
-      let corners = cell.getCornerLatLngs()
-      let cellBounds = L.latLngBounds([corners[0], corners[1]]).extend(corners[2]).extend(corners[3])
+      const corners = cell.getCornerLatLngs()
+      const cellBounds = L.latLngBounds([corners[0], corners[1]]).extend(corners[2]).extend(corners[3])
       if (cellBounds.intersects(bounds)) {
         // on screen - draw it
         drawCell(cell, options)
         // and recurse to our neighbors
-        let neighbors = cell.getNeighbors()
+        const neighbors = cell.getNeighbors()
         for (let i = 0; i < neighbors.length; i++) {
           drawCellAndNeighbors(neighbors[i], options)
         }
@@ -220,6 +220,13 @@ const updateMapGrid = () => {
     }
   })
 }
+
+map.attributionControl.setPrefix('getting last update')
+fetch('https://api.github.com/repos/pogohwh/iitc-pogo-json/commits?path=IITC-pogo.geojson')
+  .then(res => res.json())
+  .then(json => new Date(json[0].commit.author.date))
+  .then(date => date.toLocaleString('en-IN-u-ca-iso8601', { dateStyle: 'medium', timeStyle: 'short' }))
+  .then(dateString => map.attributionControl.setPrefix(`last update on ${dateString}`))
 
 regionLayer = L.layerGroup()
 map.addLayer(regionLayer)
