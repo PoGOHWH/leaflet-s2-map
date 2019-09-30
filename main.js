@@ -224,7 +224,7 @@ const updateMapGrid = () => {
 }
 
 map.attributionControl.setPrefix('getting last update')
-fetch('http://api.github.com/repos/pogohwh/db-poi/commits?path=poi.geojson')
+fetch('https://api.github.com/repos/pogohwh/db-poi/commits?path=poi.geojson')
   .then(res => res.json())
   .then(json => new Date(json[0].commit.author.date))
   .then(date => date.toLocaleString('en-IN-u-ca-iso8601', { dateStyle: 'medium', timeStyle: 'short' }))
