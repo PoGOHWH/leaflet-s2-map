@@ -77,7 +77,7 @@ const addKML = (url, style) => {
 const planned = addKML(
   'https://www.google.com/maps/d/kml?forcekml=1&mid=1V8ZPH-jR85lf00uSoBdnuFl7Nfkl9Pbx&lid=m0CmT0c9nv4', {
     fillColor: '#FB2165',
-    radius: 5,
+    radius: 7,
   }
 )
 new L.Control.Search({
