@@ -58,6 +58,10 @@ const addKML = (url, style) => {
       text: feature.properties.name,
       ...style
     }),
+    style: feature => {
+      if (feature.properties.name.match(/(\?|\*)$/)) return { fillOpacity: 0.5 }
+      return { fillOpacity: 1 }
+    }
   })
     .bindTooltip(
       layer => layer.feature.properties.name, // Unfortunately the KMLs have no description property to
